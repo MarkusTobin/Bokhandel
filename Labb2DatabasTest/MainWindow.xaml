@@ -1,0 +1,66 @@
+﻿<Window x:Class="Labb2DatabasTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Labb2DatabasTest"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListBox x:Name="butikListBox" 
+                 Grid.Column="0" 
+                 Margin="10" 
+                 DisplayMemberPath="Butiksnamn" 
+                 SelectionMode="Single"/>
+
+        <DataGrid x:Name="myDataGrid" 
+                  Grid.Column="1"
+                  AutoGenerateColumns="False" 
+                  SelectionMode="Single"
+                  AlternationCount="2"
+                  AlternatingRowBackground="LightGray"
+                  RowBackground="White"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Butiksnamn" Width="Auto" Binding="{Binding Butiksnamn}"/>
+                <DataGridTextColumn Header="Id" Width="*" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Adress" Width="Auto" Binding="{Binding Adress}"/>
+                <DataGridTextColumn Header="Stad" Width="*" Binding="{Binding Stad}"/>
+                <DataGridTextColumn Header="Hemsida" Width="Auto" Binding="{Binding Hemsida}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <Button Content="Edit" 
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="23,381,0,0"
+            Width="150"
+            Click="EditButton_Click"/>
+
+        <Button Content="UtökadInformation"
+                Grid.Column="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="200,381,10,0"
+            Width="150"
+            Click="UtökadInformationButton_Click"/>
+        <Button Content="Exit application"
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="381,381,10,0"
+            Width="150"
+            Click="Exit_Application_Click"/>
+    </Grid>
+</Window>

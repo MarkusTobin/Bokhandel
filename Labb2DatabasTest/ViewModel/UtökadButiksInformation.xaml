@@ -1,0 +1,65 @@
+﻿<Window x:Class="Labb2DatabasTest.ViewModel.UtökadButiksInformation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Labb2DatabasTest.ViewModel"
+        mc:Ignorable="d"
+        Title="UtökadButiksInformation" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}" x:Key="TextOnRightSide" >
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="TextAlignment" Value="Right" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListBox x:Name="utökadButikListBox"
+                 Grid.Column="0"
+                 Margin="10"
+                 DisplayMemberPath="Butiksnamn"
+                 SelectionMode="Single" />
+
+        <DataGrid x:Name="utökadMyDataGrid"
+                  Grid.Column="1"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  AlternationCount="2"
+                  AlternatingRowBackground="LightGray"
+                  RowBackground="White"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn  Header="Butiksnamn" Width="Auto" Binding="{Binding Butiksnamn}" />
+                <DataGridTextColumn  Header="Olika Boktitlar" Width="*" Binding="{Binding AntalOlikaBoktitlar}"/>
+                <DataGridTextColumn  Header="Antal Böcker" Width="*" Binding="{Binding TotaltAntalBöcker}" />
+                <DataGridTextColumn  Header="Lagervärde (kr)"  Width="*" Binding="{Binding TotaltLagervärde}" ElementStyle="{StaticResource TextOnRightSide}"/>
+                <DataGridTextColumn  Header="Anställda" Width="*" Binding="{Binding AntalAnställda}" />
+                <DataGridTextColumn  Header="Total Lön (kr)" Width="*" Binding="{Binding TotalLön}" ElementStyle="{StaticResource TextOnRightSide}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Lager"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="200,381,10,0"
+                Width="150"
+                Click="LagerButton_Click"/>
+        
+        <Button Content="Close window"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="381,381,10,0"
+                Width="150"
+                Click="CloseButton_Click"/>
+    </Grid>
+</Window>

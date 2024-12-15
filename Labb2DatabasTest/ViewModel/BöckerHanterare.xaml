@@ -1,0 +1,75 @@
+﻿<Window x:Class="Labb2DatabasTest.ViewModel.BöckerHanterare"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Labb2DatabasTest.ViewModel"
+        mc:Ignorable="d"
+        Title="BöckerHanterare" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListBox x:Name="böckerListBox"
+                 MouseDoubleClick="BöckerListBox_MouseDoubleClick"
+                 DisplayMemberPath="Title" 
+                 Grid.Column="0"
+                 Margin="10,10,10,35"
+                 SelectionMode="Single"
+                 SelectionChanged="EnableRemoveBookButton"/>
+        
+        <Button Content="Ta bort från sortimentet"
+                x:Name="taBortFrånSortimentet"
+                VerticalAlignment="Top"
+                IsEnabled="False" 
+                Margin="23,381,23,0"
+                Width="150"
+                Click="Ta_bort_från_Sortimentet_Click"/>
+        <DataGrid x:Name="böckerMyDataGrid"
+                  Grid.Column="1"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  AlternationCount="2"
+                  AlternatingRowBackground="LightGray"
+                  RowBackground="White"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Boktitel" Width="*" Binding="{Binding Title}" />
+                <DataGridTextColumn Header="ISBN13" Width="*" Binding="{Binding Isbn13}" />
+                <DataGridTextColumn Header="Språk" Width="*" Binding="{Binding Språk}" />
+                <DataGridTextColumn Header="Pris(kr)" Width="*" Binding="{Binding Pris}" />
+                <DataGridTextColumn Header="Utgivardatum" Width="*" Binding="{Binding Utgivardatum}" />
+                <DataGridTextColumn Header="Antal" Width="*" Binding="{Binding AntalBöckerKvar}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Lägg till bok i butik" 
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="19,381,10,0"
+                Width="150"
+                Click="LäggTillBokIButik_Click"/>
+
+        <Button Content="Ta bort bok i butik"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="200,381,10,0"
+                Width="150"
+                Click="TaBortBokIButik_Click"/>
+        
+        <Button Content="Stäng fönster"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="381,381,10,0"
+                Width="150"
+                Click="CloseButton_Click"/>
+    </Grid>
+</Window>
