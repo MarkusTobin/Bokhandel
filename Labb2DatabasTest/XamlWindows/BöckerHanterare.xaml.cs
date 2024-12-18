@@ -7,7 +7,6 @@ using System.Windows.Media;
 
 namespace Labb2DatabasTest.XamlWindows
 {
-
     public partial class BöckerHanterare : Window
     {
         private readonly Butiker _selectedButik;
@@ -53,8 +52,6 @@ namespace Labb2DatabasTest.XamlWindows
             böckerMyDataGrid.ItemsSource = böckerIButik;
         }
 
-
-        
         private void Lägg_Till_Bok_I_Sortimentet_Click(object sender, RoutedEventArgs e)
         {
             var läggTillNyBokWindow = new LäggTillNyBok();
@@ -86,7 +83,6 @@ namespace Labb2DatabasTest.XamlWindows
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
-
                 if (result == MessageBoxResult.Yes && book != null)
                 {
                     foreach (var författare in book.Författares.ToList()) 
@@ -100,7 +96,6 @@ namespace Labb2DatabasTest.XamlWindows
                 }
             }
         }
-
 
         private void LäggTillBokIButik_Click(object sender, RoutedEventArgs e)
         {

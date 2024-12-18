@@ -8,7 +8,6 @@ namespace Labb2DatabasTest.XamlWindows
     public partial class LäggTillNyBok : Window
     {
         private Böcker nyBok;
-
         public LäggTillNyBok()
         {
             InitializeComponent();
@@ -53,7 +52,6 @@ namespace Labb2DatabasTest.XamlWindows
 
         private bool IsInputValid()
         {
-
             bool isDateValid = DateOnly.TryParseExact(tbUtgivardatum.Text, "yyyy-MM-dd", out _);
 
             return
@@ -106,7 +104,6 @@ namespace Labb2DatabasTest.XamlWindows
             lbFörfattare.ItemsSource = db.Författares.ToList();
         }
 
-
         private void TaBortFörfattare_Click(object sender, RoutedEventArgs e)
         {
             var selectedFörfattareList = lbFörfattare.SelectedItems.Cast<Författare>().ToList();
@@ -131,7 +128,6 @@ namespace Labb2DatabasTest.XamlWindows
                     {
                         db.Författares.Remove(selectedFörfattare);
                     }
-
                     try
                     {
                         db.SaveChanges();

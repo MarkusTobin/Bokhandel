@@ -64,14 +64,11 @@ namespace Labb2DatabasTest
                     db.Update(selectedButik);
                     db.SaveChanges();
 
-
                     var butiker = db.Butikers.ToList();
                     var allaButiker = new Butiker { Id = 0, Butiksnamn = "Alla butiker" };
                     butiker.Insert(0, allaButiker);
 
                     butikListBox.ItemsSource = butiker;
-
-
                     myDataGrid.ItemsSource = new[] { selectedButik };
                 }
             }

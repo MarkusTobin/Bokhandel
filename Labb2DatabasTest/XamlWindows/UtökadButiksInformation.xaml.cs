@@ -14,11 +14,11 @@ namespace Labb2DatabasTest.XamlWindows
             _selectedButik = butik;
             Loaded += UtökadButiksInformation_Loaded;
         }
-
         private void UtökadButiksInformation_Loaded(object sender, RoutedEventArgs e)
         {
             SetUtökadButikListBox();
         }
+
         private void SetUtökadButikListBox()
         {
             using var db = new BokhandelContext();
@@ -41,10 +41,10 @@ namespace Labb2DatabasTest.XamlWindows
             {
                 utökadButikListBox.SelectedItem = butiker.FirstOrDefault(b => b.Butiksnamn == _selectedButik.Butiksnamn);
             }
-
             UtökadButikListBox_SelectionChanged(utökadButikListBox, null);
             utökadButikListBox.SelectionChanged += UtökadButikListBox_SelectionChanged;
         }
+
         private void UtökadButikListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (utökadButikListBox.SelectedItem is InfoPerButik selectedButik)
@@ -65,11 +65,12 @@ namespace Labb2DatabasTest.XamlWindows
                 }
             }
         }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
-        //Denna bör vara butikslager?
+
         private void LagerButton_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedButik == null || _selectedButik.Id == 0)
