@@ -1,4 +1,4 @@
-﻿<Window x:Class="Labb2DatabasTest.ViewModel.InputDialog"
+﻿<Window x:Class="Labb2DatabasTest.XamlWindows.InputAntalDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Lägg till/Ta bort" Height="250" Width="350"

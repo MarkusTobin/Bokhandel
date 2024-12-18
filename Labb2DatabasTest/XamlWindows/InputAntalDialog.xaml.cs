@@ -2,16 +2,17 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace Labb2DatabasTest.ViewModel
+namespace Labb2DatabasTest.XamlWindows
 {
-    public partial class InputDialog : Window
+    public partial class InputAntalDialog : Window
     {
         public string Answer { get; private set; }
 
-        public InputDialog(string antal)
+        public InputAntalDialog(string antal)
         {
             InitializeComponent();
             AntalText.Text = antal;
+            Answer = string.Empty;
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)

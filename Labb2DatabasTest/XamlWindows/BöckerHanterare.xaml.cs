@@ -5,14 +5,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Labb2DatabasTest.ViewModel
+namespace Labb2DatabasTest.XamlWindows
 {
 
     public partial class BöckerHanterare : Window
     {
-        private Butiker _selectedButik;
+        private readonly Butiker _selectedButik;
 
-        public event Action ButikUpdated;
+        public event Action? ButikUpdated;
         public BöckerHanterare(Butiker butik)
         {
             InitializeComponent();
@@ -32,10 +32,8 @@ namespace Labb2DatabasTest.ViewModel
         private void SetBöckerListBox()
         {
             using var db = new BokhandelContext();
-
             var böcker = db.Böckers.ToList();
-            var läggTillBok = new Böcker { Title = "Lägg till ny bok" };
-            böcker.Insert(0, läggTillBok);
+
             var böckerIButik = db.LagerSaldos
         .Where(l => l.ButikId == _selectedButik.Id && l.AntalBöckerKvar > 0)
         .Select(l => new
@@ -44,20 +42,10 @@ namespace Labb2DatabasTest.ViewModel
             l.Böckers.Title, 
             l.Böckers.Språk,
             l.Böckers.Pris, 
-            l.Böckers.Utgivardatum, 
-            AntalBöckerKvar = l.AntalBöckerKvar
+            l.Böckers.Utgivardatum,
+            l.AntalBöckerKvar
         })
         .ToList();
-
-            //Ändrar bakgrundsfärg på första boken i listan 
-            Dispatcher.InvokeAsync(() =>
-            {
-                if (böckerListBox.ItemContainerGenerator.ContainerFromIndex(0) is ListBoxItem item)
-                {
-                    item.Background = new SolidColorBrush(Colors.LightGreen);
-                }
-            }, System.Windows.Threading.DispatcherPriority.Loaded);
-
 
             böckerListBox.ItemsSource = böcker;
             böckerListBox.DisplayMemberPath = "Title";
@@ -65,21 +53,18 @@ namespace Labb2DatabasTest.ViewModel
             böckerMyDataGrid.ItemsSource = böckerIButik;
         }
 
-        private void BöckerListBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            // Check if the clicked item is the first item ("Lägg till ny bok")
-            if (böckerListBox.SelectedIndex == 0)
-            {
-                var läggTillNyBokWindow = new LäggTillNyBok();
-                if (läggTillNyBokWindow.ShowDialog() == true)
-                {
-                    SetBöckerListBox();
-                }
-            }
 
+        
+        private void Lägg_Till_Bok_I_Sortimentet_Click(object sender, RoutedEventArgs e)
+        {
+            var läggTillNyBokWindow = new LäggTillNyBok();
+            if (läggTillNyBokWindow.ShowDialog() == true)
+            {
+                SetBöckerListBox();
+            }
         }
 
-        private void Ta_bort_från_Sortimentet_Click(object sender, RoutedEventArgs e)
+        private void Ta_Bort_Bok_Från_Sortimentet_Click(object sender, RoutedEventArgs e)
         {
             if (böckerListBox.SelectedItem is Böcker selectedBook)
             {
@@ -92,12 +77,12 @@ namespace Labb2DatabasTest.ViewModel
 
                 if (existerarIButik)
                 {
-                    MessageBox.Show("Du kan inte ta bort en bok som existerar i en butiks lager.", "Error", MessageBoxButton.OK);
+                    MessageBox.Show("Du kan inte ta bort en bok som finns i en butiks lager.", "Error", MessageBoxButton.OK);
                     return;
                 }
                 var result = MessageBox.Show(
-                $"Are you sure you want to REMOVE {selectedBook.Title}?",
-                "Confirm Save",
+                $"Är du säker på att du vill TA BORT {selectedBook.Title}?",
+                "Bekräfta",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
@@ -116,29 +101,22 @@ namespace Labb2DatabasTest.ViewModel
             }
         }
 
-        private void EnableRemoveBookButton(object sender, SelectionChangedEventArgs e)
-        {
-            if (böckerListBox.SelectedItem is Böcker selectedBok)
-            {
-                taBortFrånSortimentet.IsEnabled = selectedBok != null && böckerListBox.SelectedIndex != 0;
-            }
-        }
 
         private void LäggTillBokIButik_Click(object sender, RoutedEventArgs e)
         {
-            if (böckerListBox.SelectedItem is Böcker selectedbok && böckerListBox.SelectedIndex != 0)
+            if (böckerListBox.SelectedItem is Böcker selectedbok)
             {
-                var inputDialog = new InputDialog($"Lägg till boken: {selectedbok.Title}\nTill: {_selectedButik.Butiksnamn}\nAnge antal:");
+                var inputAntalDialog = new InputAntalDialog($"Lägg till boken: {selectedbok.Title}\nTill: {_selectedButik.Butiksnamn}\nAnge antal:");
 
-                if (inputDialog.ShowDialog() == true)
+                if (inputAntalDialog.ShowDialog() == true)
                 {
-                    if (int.TryParse(inputDialog.Answer, out var antalBöcker) && antalBöcker > 0)
+                    if (int.TryParse(inputAntalDialog.Answer, out var antalBöcker) && antalBöcker > 0)
                     {
                         using var db = new BokhandelContext();
 
                         var bookExistsInStoreCheck = db.LagerSaldos.FirstOrDefault(l => l.ButikId == _selectedButik.Id && l.Isbn13 == selectedbok.Isbn13);
 
-                        MessageBox.Show($"Added {antalBöcker} books to the store.", "Information", MessageBoxButton.OK);
+                        MessageBox.Show($"La till {antalBöcker} böcker till butiken.", "Information", MessageBoxButton.OK);
                         if (bookExistsInStoreCheck != null)
                         {
                             bookExistsInStoreCheck.AntalBöckerKvar += antalBöcker;
@@ -169,23 +147,24 @@ namespace Labb2DatabasTest.ViewModel
             if (böckerMyDataGrid.SelectedItem is { } selectedBook)
             {
                 dynamic book = selectedBook;
-                var inputDialog = new InputDialog($"Ta bort: {book.Title}\nFrån: {_selectedButik.Butiksnamn} \nAnge antal: ");
-                if (inputDialog.ShowDialog() == true)
+                var inputAntalDialog = new InputAntalDialog($"Ta bort: {book.Title}\nFrån: {_selectedButik.Butiksnamn} \nAnge antal: ");
+                if (inputAntalDialog.ShowDialog() == true)
                 {
-                    if (int.TryParse(inputDialog.Answer, out var antalBöcker) && antalBöcker > 0)
+                    if (int.TryParse(inputAntalDialog.Answer, out var antalBöcker) && antalBöcker > 0)
                     {
+                        var selectedBookIsbn = (string)book.Isbn13;
                         using var db = new BokhandelContext();
-                        var bookToRemoveInStore = db.LagerSaldos.FirstOrDefault(l => l.ButikId == _selectedButik.Id);
+                        var bookToRemoveInStore = db.LagerSaldos.FirstOrDefault(l => l.ButikId == _selectedButik.Id && l.Isbn13 == selectedBookIsbn);
                         if (bookToRemoveInStore != null)
                         {
                             if (bookToRemoveInStore.AntalBöckerKvar - antalBöcker > 0)
                             {
-                              MessageBox.Show($"Removing {antalBöcker} books from the store.", "Information", MessageBoxButton.OK);
+                                MessageBox.Show($"Tar bort {antalBöcker} böcker från butiken.", "Information", MessageBoxButton.OK);
                                 bookToRemoveInStore.AntalBöckerKvar -= antalBöcker;
                             }
                             else
                             {
-                                 MessageBox.Show($"Removing {bookToRemoveInStore.AntalBöckerKvar} books from the store.", "Information", MessageBoxButton.OK);
+                                MessageBox.Show($"Tar bort {bookToRemoveInStore.AntalBöckerKvar} böcker från butiken.", "Information", MessageBoxButton.OK);
                                 db.LagerSaldos.Remove(bookToRemoveInStore);
                             }
 
@@ -205,6 +184,24 @@ namespace Labb2DatabasTest.ViewModel
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void EnableButtonsOnListboxChangedItem(object sender, SelectionChangedEventArgs e)
+        {
+            if (böckerListBox.SelectedItem is Böcker selectedBok)
+            {
+                taBortBokFrånSortimentet.IsEnabled = selectedBok != null;
+                läggTillBokIButik.IsEnabled = selectedBok != null;
+            }
+            else
+            {
+                taBortBokFrånSortimentet.IsEnabled = false;
+                läggTillBokIButik.IsEnabled = false;
+            }
+        }
+        private void BöckerMyDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            taBortBokIButik.IsEnabled = böckerMyDataGrid.SelectedItem != null;
         }
     }
 }

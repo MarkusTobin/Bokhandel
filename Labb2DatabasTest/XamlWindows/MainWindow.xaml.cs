@@ -1,5 +1,5 @@
 ﻿using Labb2DatabasTest.Model;
-using Labb2DatabasTest.ViewModel;
+using Labb2DatabasTest.XamlWindows;
 using System.Windows;
 
 namespace Labb2DatabasTest
@@ -39,10 +39,12 @@ namespace Labb2DatabasTest
                 using var db = new BokhandelContext();
                 if (selectedButik.Id == 0)
                 {
+                    editButton.IsEnabled = false;
                     myDataGrid.ItemsSource = db.Butikers.ToList();
                 }
                 else
                 {
+                    editButton.IsEnabled = true;
                     myDataGrid.ItemsSource = new[] { selectedButik };
                 }
             }
@@ -53,12 +55,6 @@ namespace Labb2DatabasTest
             if (butikListBox.SelectedItem is Butiker selectedButik)
             {
            
-                if (selectedButik.Id == 0)
-                {
-                    MessageBox.Show("Välj en specifik butik att edita.", "Ingen butik vald", MessageBoxButton.OK);
-                    return;
-                }
-
                 var editWindow = new EditButik(selectedButik);
                 var result = editWindow.ShowDialog();
 
@@ -85,7 +81,7 @@ namespace Labb2DatabasTest
             }
         }
 
-        private void UtökadInformationButton_Click(object sender, RoutedEventArgs e)
+        private void Utökad_InformationButton_Click(object sender, RoutedEventArgs e)
         {
             if (butikListBox.SelectedItem is Butiker selectedButik)
             {
@@ -94,9 +90,9 @@ namespace Labb2DatabasTest
             }
         }
 
-        private void Exit_Application_Click(object sender, RoutedEventArgs e)
+        private void Exit_Applikationen_Click(object sender, RoutedEventArgs e)
         {
-            var result = MessageBox.Show("Är du säker du vill stänga programmet?", "Avslutar", MessageBoxButton.YesNo);
+            var result = MessageBox.Show("Är du säker att du vill avsluta programet??", "Stänger", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 Close();

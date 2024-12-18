@@ -3,7 +3,7 @@ using System.Printing;
 using System.Threading.Channels;
 using System.Windows;
 
-namespace Labb2DatabasTest.ViewModel
+namespace Labb2DatabasTest.XamlWindows
 {
     public partial class UtökadButiksInformation : Window
     {
@@ -42,7 +42,7 @@ namespace Labb2DatabasTest.ViewModel
                 utökadButikListBox.SelectedItem = butiker.FirstOrDefault(b => b.Butiksnamn == _selectedButik.Butiksnamn);
             }
 
-            UtökadButikListBox_SelectionChanged(utökadButikListBox, null);  
+            UtökadButikListBox_SelectionChanged(utökadButikListBox, null);
             utökadButikListBox.SelectionChanged += UtökadButikListBox_SelectionChanged;
         }
         private void UtökadButikListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -51,14 +51,16 @@ namespace Labb2DatabasTest.ViewModel
             {
                 using var db = new BokhandelContext();
 
-                _selectedButik = db.Butikers.FirstOrDefault(b => b.Butiksnamn == selectedButik.Butiksnamn);
+                _selectedButik = db.Butikers.FirstOrDefault(b => b.Butiksnamn == selectedButik.Butiksnamn) ?? new Butiker();
 
                 if (selectedButik.Butiksnamn == "Alla butiker")
                 {
+                    LagerButton.IsEnabled = false;
                     utökadMyDataGrid.ItemsSource = db.InfoPerButiks.ToList();
                 }
                 else
                 {
+                    LagerButton.IsEnabled = true;
                     utökadMyDataGrid.ItemsSource = new[] { selectedButik };
                 }
             }

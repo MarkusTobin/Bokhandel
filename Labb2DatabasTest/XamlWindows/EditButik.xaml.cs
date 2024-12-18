@@ -1,7 +1,7 @@
 ﻿using Labb2DatabasTest.Model;
 using System.Windows;
 
-namespace Labb2DatabasTest.ViewModel
+namespace Labb2DatabasTest.XamlWindows
 {
     public partial class EditButik : Window
     {
